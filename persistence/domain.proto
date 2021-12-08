@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package persistence;
+
+option go_package = "github.com/JoeQiao666/billing/persistence;persistence";
+
+message Price {
+  string product_id = 1;
+  string product_name = 2;
+  int32 price = 3;
+}
+
+message PricesAddedOrUpdated {
+  repeated Price prices = 1;
+}
+
+message PricesDeleted {
+  repeated Price prices = 1;
+}
+
+message Prices {
+  repeated Price prices = 1;
+}
