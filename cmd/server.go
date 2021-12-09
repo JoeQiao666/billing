@@ -19,7 +19,7 @@ func main() {
 	}
 	err = server.RegisterEventSourced(&eventsourced.Entity{
 		ServiceName:   "billing.Billing",
-		PersistenceID: "Inventory",
+		PersistenceID: "Billing",
 		EntityFunc:    billing.NewBillingCenter,
 	}, protocol.DescriptorConfig{
 		Service: "service.proto",

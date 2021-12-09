@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-// import "cloudstate/entity_key.proto";
+import "cloudstate/entity_key.proto";
 import "google/api/annotations.proto";
 
 package billing;
@@ -15,21 +15,21 @@ message Price {
 }
 
 message Prices {
-  repeated Price Prices = 1;
+  repeated Price prices = 1;
 }
 
 message AddOrUpdatePrices {
-  // string billing_center_id = 1 [(.cloudstate.entity_key) = true];
-  repeated Price Prices = 2;
+  string billing_center_id = 1 [(.cloudstate.entity_key) = true];
+  repeated Price prices = 2;
 }
 
 message DeletePrices {
-  // string billing_center_id = 1 [(.cloudstate.entity_key) = true];
-  repeated Price Prices = 2;
+  string billing_center_id = 1 [(.cloudstate.entity_key) = true];
+  repeated Price prices = 2;
 }
 
 message QueryPrices {
-  // string billing_center_id = 1 [(.cloudstate.entity_key) = true];
+  string billing_center_id = 1 [(.cloudstate.entity_key) = true];
 }
 
 message Product {
@@ -39,7 +39,7 @@ message Product {
 }
 
 message CalculatePrice {
-  // string billing_center_id = 1 [(.cloudstate.entity_key) = true];
+  string billing_center_id = 1 [(.cloudstate.entity_key) = true];
   repeated Product products = 2;
 }
 
@@ -50,33 +50,28 @@ message TotalPrice {
 service Billing {
   rpc AddOrUpdateProductsPrices(AddOrUpdatePrices) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      // post: "/billing/{billing_center_id}/prices/addOrUpdate",
-      post: "/billing/prices/addOrUpdate",
+      post: "/billing/{billing_center_id}/prices/addOrUpdate",
       body: "*",
     };
   }
 
   rpc DeleteProductsPrices(DeletePrices) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      // post: "/billing/{billing_center_id}/prices/delete",
-      post: "/billing/prices/delete",
+      post: "/billing/{billing_center_id}/prices/delete",
       body: "*",
     };
   }
 
   rpc GetPrices(QueryPrices) returns (Prices) {
-  // rpc GetPrices(google.protobuf.Empty) returns (Prices) {
     option (google.api.http) = {
-      // get: "/billing/{billing_center_id}/prices",
-      get: "/billing/prices",
+      get: "/billing/{billing_center_id}/prices",
       response_body: "prices"
     };
   }
 
   rpc CalculateTotalPrice(CalculatePrice) returns (TotalPrice) {
     option (google.api.http) = {
-      // post: "/billing/{billing_center_id}/prices/calculate",
-      post: "/billing/prices/calculate",
+      post: "/billing/{billing_center_id}/prices/calculate",
       body: "*",
     };
   }
