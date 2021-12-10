@@ -22,7 +22,7 @@ type BillingClient interface {
 	AddOrUpdateProductsPrices(ctx context.Context, in *AddOrUpdatePrices, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteProductsPrices(ctx context.Context, in *DeletePrices, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetPrices(ctx context.Context, in *QueryPrices, opts ...grpc.CallOption) (*Prices, error)
-	CalculateTotalPrice(ctx context.Context, in *CalculatePrice, opts ...grpc.CallOption) (*TotalPrice, error)
+	CalculateTotalPrice(ctx context.Context, in *CalculatePrice, opts ...grpc.CallOption) (*ProductsWithTotalPrice, error)
 }
 
 type billingClient struct {
@@ -60,8 +60,8 @@ func (c *billingClient) GetPrices(ctx context.Context, in *QueryPrices, opts ...
 	return out, nil
 }
 
-func (c *billingClient) CalculateTotalPrice(ctx context.Context, in *CalculatePrice, opts ...grpc.CallOption) (*TotalPrice, error) {
-	out := new(TotalPrice)
+func (c *billingClient) CalculateTotalPrice(ctx context.Context, in *CalculatePrice, opts ...grpc.CallOption) (*ProductsWithTotalPrice, error) {
+	out := new(ProductsWithTotalPrice)
 	err := c.cc.Invoke(ctx, "/billing.Billing/CalculateTotalPrice", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ type BillingServer interface {
 	AddOrUpdateProductsPrices(context.Context, *AddOrUpdatePrices) (*emptypb.Empty, error)
 	DeleteProductsPrices(context.Context, *DeletePrices) (*emptypb.Empty, error)
 	GetPrices(context.Context, *QueryPrices) (*Prices, error)
-	CalculateTotalPrice(context.Context, *CalculatePrice) (*TotalPrice, error)
+	CalculateTotalPrice(context.Context, *CalculatePrice) (*ProductsWithTotalPrice, error)
 	mustEmbedUnimplementedBillingServer()
 }
 
@@ -93,7 +93,7 @@ func (UnimplementedBillingServer) DeleteProductsPrices(context.Context, *DeleteP
 func (UnimplementedBillingServer) GetPrices(context.Context, *QueryPrices) (*Prices, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPrices not implemented")
 }
-func (UnimplementedBillingServer) CalculateTotalPrice(context.Context, *CalculatePrice) (*TotalPrice, error) {
+func (UnimplementedBillingServer) CalculateTotalPrice(context.Context, *CalculatePrice) (*ProductsWithTotalPrice, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CalculateTotalPrice not implemented")
 }
 func (UnimplementedBillingServer) mustEmbedUnimplementedBillingServer() {}
