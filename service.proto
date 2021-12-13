@@ -48,6 +48,10 @@ message ProductsWithTotalPrice {
   int32 totalPrice = 2;
 }
 
+message Resp {
+  ProductsWithTotalPrice productsWithTotalPrice = 1;
+}
+
 service Billing {
   rpc AddOrUpdateProductsPrices(AddOrUpdatePrices) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -70,7 +74,7 @@ service Billing {
     };
   }
 
-  rpc CalculateTotalPrice(CalculatePrice) returns (ProductsWithTotalPrice) {
+  rpc CalculateTotalPrice(CalculatePrice) returns (Resp) {
     option (google.api.http) = {
       post: "/billing/{billing_center_id}/prices/calculate",
       body: "*",

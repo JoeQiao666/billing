@@ -69,19 +69,21 @@ func (b *BillingCenter) getPriceById(id string) (int32, error) {
 	return 0, fmt.Errorf("there is no price info of %s", id)
 }
 
-func (b *BillingCenter) CalculatePrice(c *eventsourced.Context, items *CalculatePrice) (*ProductsWithTotalPrice, error) {
+func (b *BillingCenter) CalculatePrice(c *eventsourced.Context, items *CalculatePrice) (*Resp, error) {
 	var totalPrice int32 = 0
 	for _, v := range items.GetProducts() {
 		price, err := b.getPriceById(v.GetProductId())
 		if err != nil {
 			log.Println(err.Error())
-			return &ProductsWithTotalPrice{}, err
+			return &Resp{}, err
 		}
 		totalPrice = totalPrice + price*v.GetQuantity()
 	}
-	return &ProductsWithTotalPrice{
-		TotalPrice: totalPrice,
-		Products:   items.GetProducts(),
+	return &Resp{
+		ProductsWithTotalPrice: &ProductsWithTotalPrice{
+			TotalPrice: totalPrice,
+			Products:   items.GetProducts(),
+		},
 	}, nil
 }
 
